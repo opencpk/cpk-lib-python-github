@@ -3,12 +3,12 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = [
-    "cpk_lib_python_github",
-    "cpk_lib_python_github.github_app_token_generator_package",
-    "cpk_lib_python_github.github_app_token_generator_package.github_app_token_generator"
-]
+#packages = ["cpk_lib_python_github"]
 # packages = { find = { where = ["."] } } Just FYI in case we need it in the future: this can also be used but it is too permissive
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["cpk_lib_python_github*"]
 
 [project]
 name = "cpk-lib-python-github"
