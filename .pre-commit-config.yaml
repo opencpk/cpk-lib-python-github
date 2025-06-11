@@ -1,0 +1,109 @@
+---
+repos:
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: trailing-whitespace
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: fix-encoding-pragma
+      - id: file-contents-sorter
+      - id: check-case-conflict
+      - id: mixed-line-ending
+        args: [--fix=lf]
+  # -----------------------------
+  # Checkov is a static code analysis tool for scanning infrastructure as code (IaC) files for misconfigurations
+  # that may lead to security or compliance problems.
+  # -----------------------------
+  # Checkov includes more than 750 predefined policies to check for common misconfiguration issues.
+  # Checkov also supports the creation and contribution of custom policies.
+  # -----------------------------
+  # - repo: https://github.com/bridgecrewio/checkov.git
+  #   rev: 3.2.174
+  #   hooks:
+  #     - id: checkov
+
+  # -----------------------------
+  # Python Code Formatting with Black
+  # -----------------------------
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+        language_version: python3
+        files: \.py$
+        args: [--config=pyproject.toml]
+
+  # -----------------------------
+  # Python Import Sorting with isort (complements Black)
+  # -----------------------------
+  - repo: https://github.com/pycqa/isort
+    rev: 6.0.1
+    hooks:
+      - id: isort
+        files: \.py$
+        args: [--profile=black, --line-length=88]
+
+  # -----------------------------
+  # Python Code Quality with Pylint
+  # -----------------------------
+  - repo: https://github.com/pycqa/pylint
+    rev: v3.3.7
+    hooks:
+      - id: pylint
+        args: [--rcfile=pyproject.toml]
+        files: \.py$
+        additional_dependencies: [PyJWT, requests, toml, colorama, setuptools]
+
+  # -----------------------------
+  # Gitleaks SAST tool for detecting and preventing hardcoded secrets like passwords, api keys, and tokens in git repos
+  # -----------------------------
+  # If you are knowingly committing something that is not a secret and gitleaks is catching it,
+  # you can add an inline comment of '# gitleaks:allow' to the end of that line in your file.
+  # This will instructs gitleaks to ignore that secret - example:
+  #   some_non_secret_value = a1b2c3d4e5f6g7h8i9j0 # gitleaks:allow
+  # -----------------------------
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.27.2
+    hooks:
+      - id: gitleaks
+  # -----------------------------
+  # # Generates Table of Contents in Markdown files
+  # # -----------------------------
+  - repo: https://github.com/frnmst/md-toc
+    rev: 9.0.0
+    hooks:
+      - id: md-toc
+        args: [-p, github]  # CLI options
+  # -----------------------------
+  # YAML Linting on yaml files for pre-commit and github actions
+  # -----------------------------
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.37.1
+    hooks:
+      - id: yamllint
+        name: Check YAML syntax with yamllint
+        args: [--strict, -c=.yamllint.yaml, '.']
+        always_run: true
+        pass_filenames: true
+
+  # -----------------------------
+  # GitHub Actions Workflow Linting on .github/workflows/*.yml files
+  # -----------------------------
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.7
+    hooks:
+      - id: actionlint
+
+  - repo: local
+    hooks:
+      - id: toml build
+        name: test the .toml package health
+        entry: pip3 install .
+        language: python
+        pass_filenames: false
+        always_run: true
