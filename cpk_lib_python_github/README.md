@@ -473,11 +473,8 @@ The tool automatically creates log files:
 Make sure you're in the virtual environment:
 
 ```bash
-# Make sure you're in the virtual environment
-source venv/bin/activate
 
-# Reinstall the package to pick up new dependencies
-pip install -e .
+pip install git+https://github.com/opencpk/cpk-lib-python-github.git
 
 # Now try running the command again
 github-app-token-generator
@@ -497,6 +494,27 @@ For support and questions:
 - 📧 Email: opencepk@gmail.com
 - 🐛 Issues: Submit via GitHub Issues
 - 📚 Documentation: This README and built-in help (`--help`)
+
+---
+
+## 🗺️ Roadmap
+
+### Current (v1.x)
+- ✅ GitHub App Token Generator
+- ✅ CLI interface with rich output
+- ✅ Comprehensive token management
+
+### Upcoming (v2.x)
+- 🔄 Repository bulk operations
+- 🔄 Issue lifecycle automation
+- 🔄 Pull request workflow tools
+- 🔄 Webhook processing utilities
+
+### Future (v3.x)
+- 🔮 GitHub Actions integration
+- 🔮 Advanced analytics and reporting
+- 🔮 Multi-organization management
+- 🔮 GraphQL API integration
 
 ---
 

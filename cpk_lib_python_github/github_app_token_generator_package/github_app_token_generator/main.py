@@ -869,23 +869,23 @@ def setup_argument_parser():
         epilog="""
 Examples:
   # Generate tokens (using private key file)
-  %(prog)s --org myorg --app-id 12345 --private-key-path /path/to/key.pem
+  %(prog)s --org myorg --app-id $APP_ID --private-key-path /path/to/key.pem
 
   # Generate tokens (using private key content)
-  %(prog)s --org myorg --app-id 12345 --private-key "Content of the private Key"
+  %(prog)s --org myorg --app-id $APP_ID --private-key "Content of the private Key"
 
-  %(prog)s --installation-id 98765 --app-id 12345 --private-key-path /path/to/key.pem
+  %(prog)s --installation-id 98765 --app-id $APP_ID --private-key-path /path/to/key.pem
 
   # List installations
-  %(prog)s --list-installations --app-id 12345 --private-key-path /path/to/key.pem
+  %(prog)s --list-installations --app-id $APP_ID --private-key-path /path/to/key.pem
 
   # Analyze GitHub App
-  %(prog)s --analyze-app --app-id 12345 --private-key "Content of the private Key"
+  %(prog)s --analyze-app --app-id $APP_ID --private-key "Content of the private Key"
 
   # Token management
-  %(prog)s --validate-token ghs_xxxxxxxxxxxxx
-  %(prog)s --revoke-token ghs_xxxxxxxxxxxxx
-  %(prog)s --revoke-token ghs_xxxxxxxxxxxxx --force
+  %(prog)s --validate-token ghs_TOKEN
+  %(prog)s --revoke-token ghs_TOKEN
+  %(prog)s --revoke-token ghs_TOKEN --force
 
 Environment Variables:
   APP_ID                    GitHub App ID
