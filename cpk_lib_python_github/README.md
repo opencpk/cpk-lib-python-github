@@ -12,6 +12,7 @@ A powerful CLI tool for generating, managing, and analyzing GitHub App installat
 - [Environment Variables](#-environment-variables)
 - [Sample Outputs](#-sample-outputs)
 - [Common Use Cases](#-common-use-cases)
+- [Python SDK Usage](#-python-sdk-usage)
 - [Troubleshooting](#-troubleshooting)
 
 ## ✨ Features
@@ -117,17 +118,17 @@ github-app-token-generator --analyze-app --app-id ${{YOUR_APP_ID}} --private-key
 
 #### Validate an existing token:
 ```bash
-github-app-token-generator --validate-token ghs_xxx
+github-app-token-generator --validate-token ghs_TOKEN
 ```
 
 #### Revoke a token (with confirmation):
 ```bash
-github-app-token-generator --revoke-token ghs_xxx
+github-app-token-generator --revoke-token ghs_TOKEN
 ```
 
 #### Force revoke a token (no confirmation):
 ```bash
-github-app-token-generator --revoke-token ghs_xxx --force
+github-app-token-generator --revoke-token ghs_TOKEN --force
 ```
 
 ### 🐛 Debug & Help
@@ -211,14 +212,14 @@ $ github-app-token-generator --org orginc --app-id ${{YOUR_APP_ID}} --private-ke
 
 **Output:**
 ```
-ghs_xxx
+ghs_TOKEN
 🔑 ✅ Token generated for organization 'orginc'
 ```
 
 ### ✅ Token Validation Output
 
 ```bash
-$ github-app-token-generator --validate-token ghs_xxx
+$ github-app-token-generator --validate-token ghs_TOKEN
 ```
 
 **Output:**
@@ -297,19 +298,13 @@ $ github-app-token-generator --analyze-app --app-id ${{YOUR_APP_ID}} --private-k
 ### 🗑️ Token Revocation Output
 
 ```bash
-$ github-app-token-generator --revoke-token ghs_xxx
+$ github-app-token-generator --revoke-token ghs_TOKEN
 ```
 
 **Output:**
 ```
-=== Token Information ===
-  Type: GitHub App Installation Token
-  Repositories: 25
-  Scopes: GitHub App permissions
-  Rate limit: 4847/5000
-
 ⚠️  Are you sure you want to revoke this token? (y/N): y
-🗑️ ✅ Token revoked successfully
+✅ Token revoked successfully
 ```
 
 ### 🚫 Organization Not Found Output
@@ -320,8 +315,7 @@ $ github-app-token-generator --org nonexistent-org --app-id ${{YOUR_APP_ID}} --p
 
 **Output:**
 ```
-❌ App is not installed in organization: nonexistent-org
-ℹ️  Run with --list-installations to see available organizations
+❌ No installation found for organization: nonexistent-org
 ```
 
 ### 🐛 Debug Mode Output
@@ -345,7 +339,7 @@ $ github-app-token-generator --debug --org orginc --app-id ${{YOUR_APP_ID}} --pr
 2024-06-10 14:30:15,458 - __main__ - INFO - Found installation ID ${{YOUR_INST_ID}} for organization: orginc
 2024-06-10 14:30:15,459 - __main__ - DEBUG - Requesting access token for installation ID: ${{YOUR_INST_ID}}
 2024-06-10 14:30:15,678 - __main__ - INFO - Successfully obtained access token for installation: ${{YOUR_INST_ID}}
-ghs_xxx
+ghs_TOKEN
 🔑 ✅ Token generated for organization 'orginc'
 ```
 
@@ -401,7 +395,7 @@ github-app-token-generator --analyze-app --app-id ${{YOUR_APP_ID}} --private-key
 github-app-token-generator --list-installations --app-id ${{YOUR_APP_ID}} --private-key-path bot.pem
 
 # Validate existing tokens
-github-app-token-generator --validate-token ghs_xxx
+github-app-token-generator --validate-token ghs_TOKEN
 ```
 
 ### 5. **Quick Token for Specific Installation**
@@ -409,6 +403,207 @@ github-app-token-generator --validate-token ghs_xxx
 ```bash
 # If you know the installation ID
 github-app-token-generator --installation-id ${{YOUR_INST_ID}} --app-id ${{YOUR_APP_ID}} --private-key-path bot.pem
+```
+
+## 🐍 Python SDK Usage
+
+### Basic Token Generation (Recommended)
+
+```python
+from cpk_lib_python_github import GitHubAppAuth, GitHubAPIClient, TokenManager, OutputFormatter
+from cpk_lib_python_github.github_app_token_generator_package.github_app_token_generator.config import Config
+import os
+
+# Create config (handles private key automatically)
+config = Config(
+    app_id=os.getenv("GITHUB_APP_ID"),
+    private_key_path=os.getenv("GITHUB_PRIVATE_KEY_PATH"),  # No manual reading needed!
+    timeout=30
+)
+
+# Use with token manager (which calls get_private_key_content internally)
+api_client = GitHubAPIClient()
+formatter = OutputFormatter()
+token_manager = TokenManager(api_client, formatter)
+
+# This handles all the private key reading automatically
+token_manager.generate_org_token(config, "your-organization")
+```
+
+### Alternative: Using Private Key Content
+
+```python
+from cpk_lib_python_github import GitHubAppAuth, GitHubAPIClient
+from cpk_lib_python_github.github_app_token_generator_package.github_app_token_generator.config import Config
+import os
+
+config = Config(
+    app_id=os.getenv("GITHUB_APP_ID"),
+    private_key_content=os.getenv("GITHUB_PRIVATE_KEY"),  # Direct content
+    timeout=30
+)
+
+
+# Generate token for specific organization
+for installation in installations:
+    if installation.get("account", {}).get("login") == "your-organization":
+        installation_id = installation.get("id")
+        access_token = api_client.get_installation_access_token(jwt_token, installation_id)
+        print(f"Access token: {access_token}")
+        break
+```
+
+### Token Validation
+
+```python
+from cpk_lib_python_github import GitHubAPIClient
+
+api_client = GitHubAPIClient()
+result = api_client.validate_token("your_token_here")
+
+if result.get('valid'):
+    print(f"✅ Token is valid")
+    print(f"Type: {result.get('type')}")
+    print(f"Repositories: {result.get('repositories_count')}")
+else:
+    print(f"❌ Token invalid: {result.get('reason')}")
+```
+
+### Complete Workflow Example
+
+```python
+#!/usr/bin/env python3
+"""Complete GitHub App token workflow using the SDK."""
+
+import os
+from cpk_lib_python_github import GitHubAPIClient, TokenManager, OutputFormatter
+from cpk_lib_python_github.github_app_token_generator_package.github_app_token_generator.config import Config
+
+def main():
+    # Create configuration from environment
+    config = Config(
+        app_id=os.getenv("GITHUB_APP_ID"),
+        private_key_path=os.getenv("GITHUB_PRIVATE_KEY_PATH"),
+        debug=True,
+        timeout=60
+    )
+
+    # Initialize SDK components
+    api_client = GitHubAPIClient()
+    formatter = OutputFormatter(use_colors=True)
+    token_manager = TokenManager(api_client, formatter)
+
+    try:
+        # List all installations
+        print("📋 Listing installations...")
+        token_manager.list_installations(config)
+
+        # Generate token for organization
+        print("\n🔑 Generating token...")
+        token_manager.generate_org_token(config, "your-organization")
+
+        # Analyze the GitHub App
+        print("\n📊 Analyzing app...")
+        token_manager.analyze_app(config)
+
+    except Exception as error:
+        formatter.print_error(f"Operation failed: {error}")
+
+if __name__ == "__main__":
+    main()
+```
+
+### CI/CD Integration Example
+
+```python
+#!/usr/bin/env python3
+"""CI/CD pipeline integration using the SDK."""
+
+import os
+import sys
+from cpk_lib_python_github import GitHubAppAuth, GitHubAPIClient
+from cpk_lib_python_github.github_app_token_generator_package.github_app_token_generator.config import Config
+
+def get_github_token_for_pipeline():
+    """Generate GitHub token for CI/CD pipeline."""
+
+    # Create config from CI environment variables
+    config = Config(
+        app_id=os.getenv("GITHUB_APP_ID"),
+        private_key_content=os.getenv("GITHUB_PRIVATE_KEY"),  # Base64 decoded in CI
+        timeout=30
+    )
+
+    if not config.has_required_config:
+        print("❌ Missing required GitHub App configuration", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        # Use the built-in helper for private key handling
+        private_key = GitHubAppAuth.get_private_key_content(
+            config.private_key_path,
+            config.private_key_content
+        )
+
+        # Generate JWT and access token
+        auth = GitHubAppAuth(config.app_id, private_key)
+        api_client = GitHubAPIClient()
+
+        jwt_token = auth.generate_jwt()
+
+        # Get installation ID from environment or find by organization
+        installation_id = os.getenv("GITHUB_INSTALLATION_ID")
+        if installation_id:
+            access_token = api_client.get_installation_access_token(jwt_token, int(installation_id))
+        else:
+            # Find installation by organization
+            org_name = os.getenv("GITHUB_ORGANIZATION")
+            installations = api_client.list_installations(jwt_token)
+
+            for installation in installations:
+                if installation.get("account", {}).get("login") == org_name:
+                    installation_id = installation.get("id")
+                    access_token = api_client.get_installation_access_token(jwt_token, installation_id)
+                    break
+            else:
+                print(f"❌ No installation found for organization: {org_name}", file=sys.stderr)
+                sys.exit(1)
+
+        # Output token for pipeline use
+        print(access_token)
+        return access_token
+
+    except Exception as e:
+        print(f"❌ Failed to generate token: {e}", file=sys.stderr)
+        sys.exit(1)
+
+if __name__ == "__main__":
+    get_github_token_for_pipeline()
+```
+
+### Advanced Configuration Example
+
+```python
+from cpk_lib_python_github import GitHubAPIClient, TokenManager, OutputFormatter
+from cpk_lib_python_github.github_app_token_generator_package.github_app_token_generator.config import Config
+
+# Advanced configuration with all options
+config = Config(
+    app_id="YOUR_APP_ID",
+    private_key_path="/path/to/private-key.pem",
+    timeout=60,
+    debug=True
+)
+
+# Initialize components with custom settings
+api_client = GitHubAPIClient(timeout=60)
+formatter = OutputFormatter(use_colors=False)  # For CI/scripts
+token_manager = TokenManager(api_client, formatter)
+
+# Perform multiple operations
+token_manager.list_installations(config)
+token_manager.analyze_app(config)
+token_manager.generate_org_token(config, "your-organization")
 ```
 
 ## 🔧 Troubleshooting
@@ -436,7 +631,6 @@ github-app-token-generator --list-installations --app-id ${{YOUR_APP_ID}} --priv
 ```bash
 # Check app ID and private key
 github-app-token-generator --debug --analyze-app --app-id ${{YOUR_APP_ID}} --private-key-path bot.pem
-
 ```
 
 #### 4. **"Token is invalid or expired"**
@@ -473,8 +667,11 @@ The tool automatically creates log files:
 Make sure you're in the virtual environment:
 
 ```bash
+# Activate virtual environment
+source venv/bin/activate
 
-pip install git+https://github.com/opencpk/cpk-lib-python-github.git
+# Install package
+pip install -e .
 
 # Now try running the command again
 github-app-token-generator
@@ -503,6 +700,7 @@ For support and questions:
 - ✅ GitHub App Token Generator
 - ✅ CLI interface with rich output
 - ✅ Comprehensive token management
+- ✅ Python SDK for programmatic access
 
 ### Upcoming (v2.x)
 - 🔄 Repository bulk operations
@@ -519,3 +717,5 @@ For support and questions:
 ---
 
 **Made with ❤️ by the CPK Cloud Engineering Platform Kit team**
+
+*Empowering development teams with powerful GitHub automation tools.*

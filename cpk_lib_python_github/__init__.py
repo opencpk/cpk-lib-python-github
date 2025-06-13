@@ -1,16 +1,21 @@
 # -*- coding: utf-8 -*-
 """GitHub App token generator package."""
-from .github_app_token_generator_package.github_app_token_generator.main import (
-    generate_jwt,
-    get_installation_access_token,
-    list_installations,
-    revoke_installation_token,
-    validate_token,
+from .github_app_token_generator_package.github_app_token_generator import (
+    auth,
+    formatters,
+    github_api,
+    token_manager,
 )
 
+# Import the classes from modules
+GitHubAppAuth = auth.GitHubAppAuth
+OutputFormatter = formatters.OutputFormatter
+GitHubAPIClient = github_api.GitHubAPIClient
+TokenManager = token_manager.TokenManager
+
 __all__ = [
-    "get_installation_access_token",
-    "list_installations",
-    "validate_token",
-    "revoke_installation_token",
+    "GitHubAppAuth",
+    "GitHubAPIClient",
+    "TokenManager",
+    "OutputFormatter",
 ]

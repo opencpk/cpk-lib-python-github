@@ -12,6 +12,7 @@ repos:
       - id: end-of-file-fixer
       - id: fix-encoding-pragma
       - id: file-contents-sorter
+        files: ^(requirements.*\.txt|\.gitignore)$
       - id: check-case-conflict
       - id: mixed-line-ending
         args: [--fix=lf]

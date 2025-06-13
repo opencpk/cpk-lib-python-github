@@ -1,46 +1,41 @@
+# Development files
+# IDEs
+# Logs
+# OS
 # Python
-__pycache__/
-*.py[cod]
+# Virtual environments
 *$py.class
+*.egg
+*.egg-info/
+*.log
+*.py[cod]
 *.so
+*.swo
+*.swp
+.DS_Store
 .Python
+.eggs/
+.idea/
+.installed.cfg
+.python-version
+.vscode/
+ENV/
+MANIFEST
+Thumbs.db
+__pycache__/
 build/
+deleted
 develop-eggs/
 dist/
 downloads/
 eggs/
-.eggs/
+env/
 lib/
 lib64/
 parts/
-sdist/
-var/
-wheels/
 pip-wheel-metadata/
+sdist/
 share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# Virtual environments
+var/
 venv/
-env/
-ENV/
-
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-
-# Development files
-deleted
-.python-version
+wheels/
