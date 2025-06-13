@@ -37,16 +37,7 @@ A powerful CLI tool for generating, managing, and analyzing GitHub App installat
 ### Install from Source
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd cpk-lib-python-github
-
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install the package
-pip install -e .
+pip install git+https://github.com/opencpk/cpk-lib-python-github.git@IDP-43-modular
 ```
 
 ### Verify Installation
@@ -661,21 +652,6 @@ The tool automatically creates log files:
 - **Location**: `github_app_token.log` (in current directory)
 - **Content**: All operations, errors, and debug information
 - **Rotation**: Append mode (consider rotating large files)
-
-### Installation Setup
-
-Make sure you're in the virtual environment:
-
-```bash
-# Activate virtual environment
-source venv/bin/activate
-
-# Install package
-pip install -e .
-
-# Now try running the command again
-github-app-token-generator
-```
 
 ## 📄 License
 
