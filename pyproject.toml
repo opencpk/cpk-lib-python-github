@@ -72,7 +72,54 @@ dep = [
     "pylint>=2.17.0",
     "mypy>=1.0.0",
     "pre-commit>=3.0.0"
-    ]
+]
+
+test = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "responses>=0.24.0",
+    "pytest-mock>=3.10.0"
+]
+dev = [
+    "cpk-lib-python-github[dep,test]"
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "cpk_lib_python_github/github_app_token_generator_package/tests"
+]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--verbose",
+    "--cov=cpk_lib_python_github.github_app_token_generator_package.github_app_token_generator",
+    "--cov-report=term-missing",
+    "--cov-report=html"
+]
+markers = [
+    "unit: Unit tests with mocked responses",
+    "integration: Integration tests with real API calls",
+    "slow: Slow running tests"
+]
+
+[tool.coverage.run]
+source = ["cpk_lib_python_github"]
+omit = [
+    "*/tests/*",
+    "*/venv/*",
+    "*/__pycache__/*"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError"
+]
 
 
 [tool.black]
@@ -89,6 +136,7 @@ disable = [
     "too-many-arguments",
     "too-many-locals"
 ]
+
 
 [tool.pylint.design]
 max-statements = 60  # Increase from default 50 to allow longer functions
