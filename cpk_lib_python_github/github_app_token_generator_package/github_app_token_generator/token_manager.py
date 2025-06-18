@@ -86,7 +86,7 @@ class TokenManager:
 
         installation_id = None
         for installation in installations:
-            if installation.get("account", {}).get("login") == org_name:
+            if installation.get("account", {}).get("login").lower() == org_name.lower():
                 installation_id = installation.get("id")
                 break
 
