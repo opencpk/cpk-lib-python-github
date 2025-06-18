@@ -172,7 +172,6 @@ class TestGetInstallationAccessToken:
         self, github_api_client, sample_jwt_token, sample_installation_id
     ):
         """Test connection error (no mock response registered)."""
-        # Don't register any mock response to simulate connection error
 
         with pytest.raises(requests.exceptions.RequestException):
             github_api_client.get_installation_access_token(
@@ -255,7 +254,6 @@ class TestListInstallations:
         self, github_api_client, sample_jwt_token
     ):
         """Test installations listing with network error."""
-        # Don't add any responses to simulate network error
 
         with pytest.raises(requests.exceptions.RequestException):
             github_api_client.list_installations(sample_jwt_token)
@@ -373,7 +371,6 @@ class TestValidateToken:
         self, github_api_client, sample_installation_token
     ):
         """Test token validation with network error."""
-        # Don't add any responses to simulate network error
 
         result = github_api_client.validate_token(sample_installation_token)
 
@@ -458,7 +455,6 @@ class TestRevokeInstallationToken:
         self, github_api_client, sample_installation_token
     ):
         """Test token revocation with network error."""
-        # Don't add any responses to simulate network error
 
         with pytest.raises(requests.exceptions.RequestException):
             github_api_client.revoke_installation_token(sample_installation_token)
@@ -753,7 +749,6 @@ class TestGetAccessibleRepositoriesViaToken:
         self, github_api_client, sample_installation_token
     ):
         """Test repositories retrieval via token with network error."""
-        # Don't add any responses to simulate network error
 
         repos = github_api_client.get_accessible_repositories_via_token(
             sample_installation_token

@@ -148,7 +148,10 @@ class GitHubAPIClient:
             return True
 
         except requests.exceptions.HTTPError as http_error:
-            if response.status_code == 404:
+            if (
+                http_error.response is not None
+                and http_error.response.status_code == 404
+            ):
                 logger.warning("Token not found or already revoked")
                 return False
             logger.error("HTTP error occurred while revoking token: %s", http_error)
