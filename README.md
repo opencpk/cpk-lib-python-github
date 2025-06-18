@@ -20,10 +20,7 @@ This project is licensed under the **GPLv3 License** - see the [LICENSE](LICENSE
 
 ## 📞 Support & Community
 
-- 📧 **Email**: opencepk@gmail.com
 - 🐛 **Issues**: [GitHub Issues](https://github.com/opencpk/cpk-lib-python-github/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/opencpk/cpk-lib-python-github/discussions)
-- 📚 **Documentation**: [GitHub Wiki](https://github.com/opencpk/cpk-lib-python-github/wiki)
 
 
 **Made with ❤️ by the CPK Cloud Engineering Platform Kit team**
