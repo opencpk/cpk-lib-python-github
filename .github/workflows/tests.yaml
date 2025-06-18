@@ -3,9 +3,9 @@ name: Tests
 
 on:
   push:
-    branches: [main, develop, IDP-43-modular]
-  pull_request:
     branches: [main, develop]
+  pull_request:
+
 
 jobs:
   test:
@@ -19,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.x'
 
       - name: Install dependencies
         run: |
@@ -47,7 +47,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.x'
 
       - name: Install package
         run: |
