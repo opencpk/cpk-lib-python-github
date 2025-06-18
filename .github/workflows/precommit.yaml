@@ -3,9 +3,8 @@ name: precommit
 
 on:
   pull_request:
-    branches: [main, develop]
   push:
-    branches: [main, IDP-43-modular]
+    branches: [main]
 
 permissions:
   actions: read
