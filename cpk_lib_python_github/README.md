@@ -13,7 +13,6 @@ A powerful CLI tool for generating, managing, and analyzing GitHub App installat
 - [Sample Outputs](#-sample-outputs)
 - [Common Use Cases](#-common-use-cases)
 - [Python SDK Usage](#-python-sdk-usage)
-- [Troubleshooting](#-troubleshooting)
 
 ## ✨ Features
 
@@ -33,7 +32,7 @@ A powerful CLI tool for generating, managing, and analyzing GitHub App installat
 - A GitHub App with appropriate permissions
 - GitHub App private key
 
-### Install from Source
+### Install from Source (later on this will be published to pypi)
 
 ```bash
 pip install git+https://github.com/opencpk/cpk-lib-python-github.git@main
@@ -408,6 +407,7 @@ This will show:
 - 🔍 JWT generation details
 - 📊 Installation lookup process
 - ⚠️ Warning messages and errors
+
 
 ### Log Files
 
