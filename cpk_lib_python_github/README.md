@@ -12,7 +12,6 @@ A powerful CLI tool for generating, managing, and analyzing GitHub App installat
 - [Environment Variables](#-environment-variables)
 - [Sample Outputs](#-sample-outputs)
 - [Common Use Cases](#-common-use-cases)
-- [Python SDK Usage](#-python-sdk-usage)
 
 ## ✨ Features
 
@@ -107,17 +106,17 @@ github-app-token-generator --analyze-app --app-id ${{YOUR_APP_ID}} --private-key
 
 #### Validate an existing token:
 ```bash
-github-app-token-generator --validate-token ghs_TOKEN
+github-app-token-generator --validate-token $ghs_TOKEN
 ```
 
 #### Revoke a token (with confirmation):
 ```bash
-github-app-token-generator --revoke-token ghs_TOKEN
+github-app-token-generator --revoke-token $ghs_TOKEN
 ```
 
 #### Force revoke a token (no confirmation):
 ```bash
-github-app-token-generator --revoke-token ghs_TOKEN --force
+github-app-token-generator --revoke-token $ghs_TOKEN --force
 ```
 
 ### 🐛 Debug & Help
@@ -201,14 +200,14 @@ $ github-app-token-generator --org orginc --app-id ${{YOUR_APP_ID}} --private-ke
 
 **Output:**
 ```
-ghs_TOKEN
+$ghs_TOKEN
 🔑 ✅ Token generated for organization 'orginc'
 ```
 
 ### ✅ Token Validation Output
 
 ```bash
-$ github-app-token-generator --validate-token ghs_TOKEN
+$ github-app-token-generator --validate-token $ghs_TOKEN
 ```
 
 **Output:**
@@ -287,7 +286,7 @@ $ github-app-token-generator --analyze-app --app-id ${{YOUR_APP_ID}} --private-k
 ### 🗑️ Token Revocation Output
 
 ```bash
-$ github-app-token-generator --revoke-token ghs_TOKEN
+$ github-app-token-generator --revoke-token $ghs_TOKEN
 ```
 
 **Output:**
@@ -384,7 +383,7 @@ github-app-token-generator --analyze-app --app-id ${{YOUR_APP_ID}} --private-key
 github-app-token-generator --list-installations --app-id ${{YOUR_APP_ID}} --private-key-path bot.pem
 
 # Validate existing tokens
-github-app-token-generator --validate-token ghs_TOKEN
+github-app-token-generator --validate-token $ghs_TOKEN
 ```
 
 ### 5. **Quick Token for Specific Installation**
