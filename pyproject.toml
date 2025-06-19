@@ -2,14 +2,6 @@
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
-# This is commented as the next section is a better approach for this use case but may need the following in the future depending the future decisions
-# packages = [
-#    "cpk_lib_python_github",
-#    "cpk_lib_python_github.github_app_token_generator_package",
-#    "cpk_lib_python_github.github_app_token_generator_package.github_app_token_generator"
-# ]
-# packages = { find = { where = ["."] } } Just FYI in case we need it in the future: this can also be used but it is too permissive
-
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["cpk_lib_python_github*"]
