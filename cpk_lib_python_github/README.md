@@ -420,7 +420,7 @@ If you prefer to use this tool as a Python library in your scripts, you can impo
 
 ### Quick Token Generation
 
-
+```bash
  python3 -c "from cpk_lib_python_github import GitHubAPIClient, TokenManager, OutputFormatter, Config
 
 # Configure your GitHub App
@@ -441,6 +441,7 @@ print('🔑 Testing generate_org_token for YOUR_ORG_NAME...')
 token_manager.generate_org_token(config, 'YOUR_ORG_NAME')
 print('✅ README example completed successfully!')
 "
+```
 
 ## 📄 License
 
