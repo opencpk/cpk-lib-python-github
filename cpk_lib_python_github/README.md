@@ -415,6 +415,33 @@ The tool automatically creates log files:
 - **Content**: All operations, errors, and debug information
 - **Rotation**: Append mode (consider rotating large files)
 
+## 🐍 Python usage
+If you prefer to use this tool as a Python library in your scripts, you can import and use it directly:
+
+### Quick Token Generation
+
+
+ python3 -c "from cpk_lib_python_github import GitHubAPIClient, TokenManager, OutputFormatter, Config
+
+# Configure your GitHub App
+config = Config(
+    app_id='YOUR_APP_ID',
+    private_key_path='YOUR_PATH/bot.pem',
+    timeout=60,
+    debug=False
+)
+
+# Initialize components
+api_client = GitHubAPIClient(timeout=60)
+formatter = OutputFormatter(use_colors=False)
+token_manager = TokenManager(api_client, formatter)
+
+print('🔑 Testing generate_org_token for YOUR_ORG_NAME...')
+# Generate token for organization
+token_manager.generate_org_token(config, 'YOUR_ORG_NAME')
+print('✅ README example completed successfully!')
+"
+
 ## 📄 License
 
 This project is licensed under the GPLv3 License.

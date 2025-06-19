@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
-"""GitHub App token generator package."""
+"""CPK Lib Python GitHub - GitHub App Token Generator Package."""
+
 from .github_app_token_generator_package.github_app_token_generator import (
-    auth,
-    formatters,
-    github_api,
     token_manager,
 )
+from .github_app_token_generator_package.github_app_token_generator.config import (
+    Config,
+)
+from .github_app_token_generator_package.github_app_token_generator.formatters import (
+    OutputFormatter,
+)
+from .github_app_token_generator_package.github_app_token_generator.github_api import (
+    GitHubAPIClient,
+)
 
-# Import the classes from modules
-GitHubAppAuth = auth.GitHubAppAuth
-OutputFormatter = formatters.OutputFormatter
-GitHubAPIClient = github_api.GitHubAPIClient
 TokenManager = token_manager.TokenManager
 
-__all__ = [
-    "GitHubAppAuth",
-    "GitHubAPIClient",
-    "TokenManager",
-    "OutputFormatter",
-]
+__all__ = ["GitHubAPIClient", "TokenManager", "OutputFormatter", "Config"]
