@@ -2,6 +2,7 @@
 """GitHub App authentication utilities."""
 import logging
 import time
+from typing import Optional
 
 import jwt
 
@@ -11,8 +12,8 @@ logger = logging.getLogger(__name__)
 class GitHubAppAuth:
     """Handle GitHub App authentication."""
 
-    def __init__(self, app_id: str, private_key: str):
-        self.app_id = app_id
+    def __init__(self, app_id: int, private_key: str):
+        self.app_id = str(app_id)
         self.private_key = private_key
 
     def generate_jwt(self) -> str:
@@ -46,7 +47,10 @@ class GitHubAppAuth:
             raise error
 
     @staticmethod
-    def get_private_key_content(private_key_path=None, private_key_content=None) -> str:
+    def get_private_key_content(
+        private_key_path: Optional[str] = None,
+        private_key_content: Optional[str] = None,
+    ) -> str:
         """Get private key content from file or direct input."""
         if private_key_path and private_key_content:
             raise ValueError("Cannot specify both --private-key-path and --private-key")
@@ -58,8 +62,6 @@ class GitHubAppAuth:
             logger.debug("Using private key content provided directly")
             return private_key_content
 
-        if private_key_path:
-            logger.debug("Reading private key from file: %s", private_key_path)
-            return GitHubAppAuth.read_private_key(private_key_path)
-
-        raise ValueError("No private key source provided")
+        # If we reach here, private_key_path must be truthy
+        logger.debug("Reading private key from file: %s", private_key_path)
+        return GitHubAppAuth.read_private_key(private_key_path)

@@ -20,17 +20,6 @@ class Config:
     timeout: int = 30
     debug: bool = False
 
-    def __post_init__(self):
-        """Validate configuration after initialization."""
-        if self.app_id:
-            try:
-                # Ensure app_id is a valid integer
-                int(self.app_id)
-            except ValueError as error:
-                raise ValueError(
-                    f"Invalid app_id: {self.app_id}. Must be a number."
-                ) from error
-
     @property
     def has_private_key(self) -> bool:
         """Check if private key is configured."""
@@ -64,9 +53,15 @@ def get_config_from_env(args) -> Config:
 
     # Check if this operation requires app configuration
     needs_app_config = requires_app_config(args)
+    # Handle app_id with proper type conversion
+    if args.app_id:
+        config.app_id = args.app_id  # Already int from parser
+    elif os.getenv("APP_ID"):
+        try:
+            config.app_id = int(os.getenv("APP_ID"))  # Convert env var to int
+        except ValueError as exc:
+            raise ValueError(f"Invalid APP_ID environment variable: {os.getenv('APP_ID')}") from exc
 
-    # App ID - CLI args take precedence over env vars
-    config.app_id = args.app_id or os.getenv("APP_ID")
     if needs_app_config and not config.app_id:
         logger.error(
             "App ID is required for this operation. "
@@ -82,7 +77,7 @@ def get_config_from_env(args) -> Config:
     config.private_key_content = args.private_key or os.getenv("PRIVATE_KEY")
 
     if needs_app_config and not config.has_private_key:
-        logger.error(
+        logger.debug(
             "Private key is required for this operation. "
             "Set PRIVATE_KEY or PRIVATE_KEY_PATH environment variable "
             "or use --private-key/--private-key-path"
@@ -135,9 +130,7 @@ def validate_environment() -> bool:
             return False
 
         if not (private_key_path or private_key_content):
-            logger.warning(
-                "Neither PRIVATE_KEY_PATH nor PRIVATE_KEY environment variable set"
-            )
+            logger.warning("Neither PRIVATE_KEY_PATH nor PRIVATE_KEY environment variable set")
             return False
 
         # Validate app_id is a number

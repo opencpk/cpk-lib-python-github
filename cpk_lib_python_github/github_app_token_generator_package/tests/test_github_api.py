@@ -23,13 +23,10 @@ class TestGetInstallationAccessToken:
     ):  # pylint: disable=too-many-positional-arguments
         """Test successful installation access token retrieval with MOCK response."""
         expected_url = (
-            f"https://api.github.com/app/installations/"
-            f"{sample_installation_id}/access_tokens"
+            f"https://api.github.com/app/installations/" f"{sample_installation_id}/access_tokens"
         )
 
-        responses.add(
-            responses.POST, expected_url, json=sample_access_token_response, status=201
-        )
+        responses.add(responses.POST, expected_url, json=sample_access_token_response, status=201)
 
         result_token = github_api_client.get_installation_access_token(
             sample_jwt_token, sample_installation_id
@@ -50,8 +47,7 @@ class TestGetInstallationAccessToken:
     ):
         """Test HTTP 401 error (unauthorized/bad credentials)."""
         expected_url = (
-            f"https://api.github.com/app/installations/"
-            f"{sample_installation_id}/access_tokens"
+            f"https://api.github.com/app/installations/" f"{sample_installation_id}/access_tokens"
         )
 
         responses.add(
@@ -74,13 +70,10 @@ class TestGetInstallationAccessToken:
     ):
         """Test HTTP 404 error (installation not found)."""
         expected_url = (
-            f"https://api.github.com/app/installations/"
-            f"{sample_installation_id}/access_tokens"
+            f"https://api.github.com/app/installations/" f"{sample_installation_id}/access_tokens"
         )
 
-        responses.add(
-            responses.POST, expected_url, json={"message": "Not Found"}, status=404
-        )
+        responses.add(responses.POST, expected_url, json={"message": "Not Found"}, status=404)
 
         with pytest.raises(requests.exceptions.HTTPError) as exc_info:
             github_api_client.get_installation_access_token(
@@ -95,8 +88,7 @@ class TestGetInstallationAccessToken:
     ):
         """Test response missing 'token' field."""
         expected_url = (
-            f"https://api.github.com/app/installations/"
-            f"{sample_installation_id}/access_tokens"
+            f"https://api.github.com/app/installations/" f"{sample_installation_id}/access_tokens"
         )
 
         invalid_response = {
@@ -119,8 +111,7 @@ class TestGetInstallationAccessToken:
     ):
         """Test empty JSON response."""
         expected_url = (
-            f"https://api.github.com/app/installations/"
-            f"{sample_installation_id}/access_tokens"
+            f"https://api.github.com/app/installations/" f"{sample_installation_id}/access_tokens"
         )
 
         responses.add(responses.POST, expected_url, json={}, status=201)
@@ -138,8 +129,7 @@ class TestGetInstallationAccessToken:
     ):
         """Test malformed JSON response."""
         expected_url = (
-            f"https://api.github.com/app/installations/"
-            f"{sample_installation_id}/access_tokens"
+            f"https://api.github.com/app/installations/" f"{sample_installation_id}/access_tokens"
         )
 
         responses.add(
@@ -155,9 +145,7 @@ class TestGetInstallationAccessToken:
                 sample_jwt_token, sample_installation_id
             )
 
-    def test_get_installation_access_token_timeout(
-        self, sample_jwt_token, sample_installation_id
-    ):
+    def test_get_installation_access_token_timeout(self, sample_jwt_token, sample_installation_id):
         """Test network timeout."""
         # Create client with very short timeout
         github_api_client = GitHubAPIClient(timeout=0.001)
@@ -189,9 +177,7 @@ class TestListInstallations:
         """Test successful installations listing."""
         expected_url = "https://api.github.com/app/installations"
 
-        responses.add(
-            responses.GET, expected_url, json=sample_installations, status=200
-        )
+        responses.add(responses.GET, expected_url, json=sample_installations, status=200)
 
         installations = github_api_client.list_installations(sample_jwt_token)
 
@@ -218,15 +204,11 @@ class TestListInstallations:
         assert len(installations) == 0
 
     @responses.activate
-    def test_list_installations_http_401_error(
-        self, github_api_client, sample_jwt_token
-    ):
+    def test_list_installations_http_401_error(self, github_api_client, sample_jwt_token):
         """Test installations listing with 401 error."""
         expected_url = "https://api.github.com/app/installations"
 
-        responses.add(
-            responses.GET, expected_url, json={"message": "Bad credentials"}, status=401
-        )
+        responses.add(responses.GET, expected_url, json={"message": "Bad credentials"}, status=401)
 
         with pytest.raises(requests.exceptions.HTTPError) as exc_info:
             github_api_client.list_installations(sample_jwt_token)
@@ -234,15 +216,11 @@ class TestListInstallations:
         assert exc_info.value.response.status_code == 401
 
     @responses.activate
-    def test_list_installations_http_403_error(
-        self, github_api_client, sample_jwt_token
-    ):
+    def test_list_installations_http_403_error(self, github_api_client, sample_jwt_token):
         """Test installations listing with 403 error."""
         expected_url = "https://api.github.com/app/installations"
 
-        responses.add(
-            responses.GET, expected_url, json={"message": "Forbidden"}, status=403
-        )
+        responses.add(responses.GET, expected_url, json={"message": "Forbidden"}, status=403)
 
         with pytest.raises(requests.exceptions.HTTPError) as exc_info:
             github_api_client.list_installations(sample_jwt_token)
@@ -250,9 +228,7 @@ class TestListInstallations:
         assert exc_info.value.response.status_code == 403
 
     @responses.activate
-    def test_list_installations_network_error(
-        self, github_api_client, sample_jwt_token
-    ):
+    def test_list_installations_network_error(self, github_api_client, sample_jwt_token):
         """Test installations listing with network error."""
 
         with pytest.raises(requests.exceptions.RequestException):
@@ -316,15 +292,11 @@ class TestValidateToken:
         assert result["scopes"] == []
 
     @responses.activate
-    def test_validate_token_401_invalid(
-        self, github_api_client, sample_installation_token
-    ):
+    def test_validate_token_401_invalid(self, github_api_client, sample_installation_token):
         """Test token validation with 401 (invalid token)."""
         expected_url = "https://api.github.com/installation/repositories"
 
-        responses.add(
-            responses.GET, expected_url, json={"message": "Bad credentials"}, status=401
-        )
+        responses.add(responses.GET, expected_url, json={"message": "Bad credentials"}, status=401)
 
         result = github_api_client.validate_token(sample_installation_token)
 
@@ -339,9 +311,7 @@ class TestValidateToken:
         """Test token validation with 403 (insufficient permissions)."""
         expected_url = "https://api.github.com/installation/repositories"
 
-        responses.add(
-            responses.GET, expected_url, json={"message": "Forbidden"}, status=403
-        )
+        responses.add(responses.GET, expected_url, json={"message": "Forbidden"}, status=403)
 
         result = github_api_client.validate_token(sample_installation_token)
 
@@ -350,15 +320,11 @@ class TestValidateToken:
         assert result["reason"] == "Insufficient permissions"
 
     @responses.activate
-    def test_validate_token_404_not_found(
-        self, github_api_client, sample_installation_token
-    ):
+    def test_validate_token_404_not_found(self, github_api_client, sample_installation_token):
         """Test token validation with 404 (not found)."""
         expected_url = "https://api.github.com/installation/repositories"
 
-        responses.add(
-            responses.GET, expected_url, json={"message": "Not Found"}, status=404
-        )
+        responses.add(responses.GET, expected_url, json={"message": "Not Found"}, status=404)
 
         result = github_api_client.validate_token(sample_installation_token)
 
@@ -367,9 +333,7 @@ class TestValidateToken:
         assert result["reason"] == "HTTP 404"
 
     @responses.activate
-    def test_validate_token_network_error(
-        self, github_api_client, sample_installation_token
-    ):
+    def test_validate_token_network_error(self, github_api_client, sample_installation_token):
         """Test token validation with network error."""
 
         result = github_api_client.validate_token(sample_installation_token)
@@ -382,9 +346,7 @@ class TestRevokeInstallationToken:
     """Test cases for revoke_installation_token method."""
 
     @responses.activate
-    def test_revoke_installation_token_success(
-        self, github_api_client, sample_installation_token
-    ):
+    def test_revoke_installation_token_success(self, github_api_client, sample_installation_token):
         """Test successful token revocation."""
         expected_url = "https://api.github.com/installation/token"
 
@@ -407,9 +369,7 @@ class TestRevokeInstallationToken:
         """Test token revocation when token not found."""
         expected_url = "https://api.github.com/installation/token"
 
-        responses.add(
-            responses.DELETE, expected_url, json={"message": "Not Found"}, status=404
-        )
+        responses.add(responses.DELETE, expected_url, json={"message": "Not Found"}, status=404)
 
         result = github_api_client.revoke_installation_token(sample_installation_token)
 
@@ -441,9 +401,7 @@ class TestRevokeInstallationToken:
         """Test token revocation with 403 error."""
         expected_url = "https://api.github.com/installation/token"
 
-        responses.add(
-            responses.DELETE, expected_url, json={"message": "Forbidden"}, status=403
-        )
+        responses.add(responses.DELETE, expected_url, json={"message": "Forbidden"}, status=403)
 
         with pytest.raises(requests.exceptions.HTTPError) as exc_info:
             github_api_client.revoke_installation_token(sample_installation_token)
@@ -464,9 +422,7 @@ class TestGetAppInfo:
     """Test cases for get_app_info method."""
 
     @responses.activate
-    def test_get_app_info_success(
-        self, github_api_client, sample_jwt_token, sample_app_info
-    ):
+    def test_get_app_info_success(self, github_api_client, sample_jwt_token, sample_app_info):
         """Test successful app info retrieval."""
         expected_url = "https://api.github.com/app"
 
@@ -489,9 +445,7 @@ class TestGetAppInfo:
         """Test app info retrieval with 401 error."""
         expected_url = "https://api.github.com/app"
 
-        responses.add(
-            responses.GET, expected_url, json={"message": "Bad credentials"}, status=401
-        )
+        responses.add(responses.GET, expected_url, json={"message": "Bad credentials"}, status=401)
 
         with pytest.raises(requests.exceptions.HTTPError) as exc_info:
             github_api_client.get_app_info(sample_jwt_token)
@@ -503,9 +457,7 @@ class TestGetAppInfo:
         """Test app info retrieval with 404 error."""
         expected_url = "https://api.github.com/app"
 
-        responses.add(
-            responses.GET, expected_url, json={"message": "Not Found"}, status=404
-        )
+        responses.add(responses.GET, expected_url, json={"message": "Not Found"}, status=404)
 
         with pytest.raises(requests.exceptions.HTTPError) as exc_info:
             github_api_client.get_app_info(sample_jwt_token)
@@ -517,9 +469,7 @@ class TestGetAppInfo:
         """Test app info retrieval with 403 error."""
         expected_url = "https://api.github.com/app"
 
-        responses.add(
-            responses.GET, expected_url, json={"message": "Forbidden"}, status=403
-        )
+        responses.add(responses.GET, expected_url, json={"message": "Forbidden"}, status=403)
 
         with pytest.raises(requests.exceptions.HTTPError) as exc_info:
             github_api_client.get_app_info(sample_jwt_token)
@@ -578,9 +528,7 @@ class TestGetInstallationRepositories:
     ):
         """Test installation repositories retrieval with token error."""
         # Mock the access token retrieval to raise an exception
-        mock_get_token.side_effect = requests.exceptions.RequestException(
-            "Network error"
-        )
+        mock_get_token.side_effect = requests.exceptions.RequestException("Network error")
 
         repos = github_api_client.get_installation_repositories(
             sample_jwt_token, sample_installation_id
@@ -606,9 +554,7 @@ class TestGetInstallationRepositories:
         mock_get_token.return_value = sample_installation_token
 
         expected_url = "https://api.github.com/installation/repositories"
-        responses.add(
-            responses.GET, expected_url, json={"message": "Forbidden"}, status=403
-        )
+        responses.add(responses.GET, expected_url, json={"message": "Forbidden"}, status=403)
 
         repos = github_api_client.get_installation_repositories(
             sample_jwt_token, sample_installation_id
@@ -656,9 +602,7 @@ class TestGetAccessibleRepositoriesViaToken:
 
         responses.add(responses.GET, expected_url, json=sample_repositories, status=200)
 
-        repos = github_api_client.get_accessible_repositories_via_token(
-            sample_installation_token
-        )
+        repos = github_api_client.get_accessible_repositories_via_token(sample_installation_token)
 
         assert repos == sample_repositories
         assert repos["total_count"] == 3
@@ -680,9 +624,7 @@ class TestGetAccessibleRepositoriesViaToken:
         empty_repos = {"total_count": 0, "repositories": []}
         responses.add(responses.GET, expected_url, json=empty_repos, status=200)
 
-        repos = github_api_client.get_accessible_repositories_via_token(
-            sample_installation_token
-        )
+        repos = github_api_client.get_accessible_repositories_via_token(sample_installation_token)
 
         assert repos["total_count"] == 0
         assert repos["repositories"] == []
@@ -694,13 +636,9 @@ class TestGetAccessibleRepositoriesViaToken:
         """Test repositories retrieval via token with 401 error."""
         expected_url = "https://api.github.com/installation/repositories"
 
-        responses.add(
-            responses.GET, expected_url, json={"message": "Bad credentials"}, status=401
-        )
+        responses.add(responses.GET, expected_url, json={"message": "Bad credentials"}, status=401)
 
-        repos = github_api_client.get_accessible_repositories_via_token(
-            sample_installation_token
-        )
+        repos = github_api_client.get_accessible_repositories_via_token(sample_installation_token)
 
         assert repos["total_count"] == 0
         assert repos["repositories"] == []
@@ -713,13 +651,9 @@ class TestGetAccessibleRepositoriesViaToken:
         """Test repositories retrieval via token with 403 error."""
         expected_url = "https://api.github.com/installation/repositories"
 
-        responses.add(
-            responses.GET, expected_url, json={"message": "Forbidden"}, status=403
-        )
+        responses.add(responses.GET, expected_url, json={"message": "Forbidden"}, status=403)
 
-        repos = github_api_client.get_accessible_repositories_via_token(
-            sample_installation_token
-        )
+        repos = github_api_client.get_accessible_repositories_via_token(sample_installation_token)
 
         assert repos["total_count"] == 0
         assert repos["repositories"] == []
@@ -732,13 +666,9 @@ class TestGetAccessibleRepositoriesViaToken:
         """Test repositories retrieval via token with 404 error."""
         expected_url = "https://api.github.com/installation/repositories"
 
-        responses.add(
-            responses.GET, expected_url, json={"message": "Not Found"}, status=404
-        )
+        responses.add(responses.GET, expected_url, json={"message": "Not Found"}, status=404)
 
-        repos = github_api_client.get_accessible_repositories_via_token(
-            sample_installation_token
-        )
+        repos = github_api_client.get_accessible_repositories_via_token(sample_installation_token)
 
         assert repos["total_count"] == 0
         assert repos["repositories"] == []
@@ -750,9 +680,7 @@ class TestGetAccessibleRepositoriesViaToken:
     ):
         """Test repositories retrieval via token with network error."""
 
-        repos = github_api_client.get_accessible_repositories_via_token(
-            sample_installation_token
-        )
+        repos = github_api_client.get_accessible_repositories_via_token(sample_installation_token)
 
         assert repos["total_count"] == 0
         assert repos["repositories"] == []
@@ -843,8 +771,7 @@ class TestGitHubAPIClientEdgeCases:
 
         for installation_id in test_cases:
             expected_url = (
-                f"https://api.github.com/app/installations/"
-                f"{installation_id}/access_tokens"
+                f"https://api.github.com/app/installations/" f"{installation_id}/access_tokens"
             )
 
             responses.add(
@@ -908,9 +835,7 @@ class TestGitHubAPIClientEdgeCases:
         expected_url = "https://api.github.com/installation/repositories"
         responses.add(responses.GET, expected_url, json=large_repo_response, status=200)
 
-        repos = github_api_client.get_accessible_repositories_via_token(
-            sample_installation_token
-        )
+        repos = github_api_client.get_accessible_repositories_via_token(sample_installation_token)
 
         assert repos["total_count"] == 1000
         assert len(repos["repositories"]) == 100

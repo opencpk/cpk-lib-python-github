@@ -26,9 +26,7 @@ class TokenManager:
 
     def revoke_token(self, token: str, force: bool = False):
         """Revoke a GitHub token - no app config needed."""
-        if not self.formatter.confirm_action(
-            "Are you sure you want to revoke this token?", force
-        ):
+        if not self.formatter.confirm_action("Are you sure you want to revoke this token?", force):
             self.formatter.print_info("Token revocation cancelled")
             return
 
@@ -67,9 +65,7 @@ class TokenManager:
     def generate_org_token(self, config: Config, org_name: str):
         """Generate token for a specific organization - requires app config."""
         if not config.has_required_config:
-            self.formatter.print_error(
-                "App ID and private key are required for token generation"
-            )
+            self.formatter.print_error("App ID and private key are required for token generation")
             return
 
         # Get private key content
@@ -91,15 +87,11 @@ class TokenManager:
                 break
 
         if not installation_id:
-            self.formatter.print_error(
-                f"No installation found for organization: {org_name}"
-            )
+            self.formatter.print_error(f"No installation found for organization: {org_name}")
             return
 
         # Generate access token
-        access_token = self.api_client.get_installation_access_token(
-            jwt_token, installation_id
-        )
+        access_token = self.api_client.get_installation_access_token(jwt_token, installation_id)
 
         # Output token
         self.formatter.print_token(access_token)
@@ -108,9 +100,7 @@ class TokenManager:
     def generate_installation_token(self, config: Config, installation_id: str):
         """Generate token for a specific installation ID - requires app config."""
         if not config.has_required_config:
-            self.formatter.print_error(
-                "App ID and private key are required for token generation"
-            )
+            self.formatter.print_error("App ID and private key are required for token generation")
             return
 
         # Get private key content
@@ -130,23 +120,17 @@ class TokenManager:
 
             # Output token
             self.formatter.print_token(access_token)
-            self.formatter.print_success(
-                f"Token generated for installation ID: {installation_id}"
-            )
+            self.formatter.print_success(f"Token generated for installation ID: {installation_id}")
 
         except ValueError as error:
-            self.formatter.print_error(
-                f"Invalid installation ID: {installation_id} - {error}"
-            )
+            self.formatter.print_error(f"Invalid installation ID: {installation_id} - {error}")
         except Exception as error:
             self.formatter.print_error(f"Failed to generate token: {error}")
 
     def analyze_app(self, config: Config):
         """Perform comprehensive GitHub App analysis - requires app config."""
         if not config.has_required_config:
-            self.formatter.print_error(
-                "App ID and private key are required for app analysis"
-            )
+            self.formatter.print_error("App ID and private key are required for app analysis")
             return
 
         self.formatter.print_info("Analyzing GitHub App...")
@@ -173,9 +157,7 @@ class TokenManager:
                 install_id = installation.get("id")
                 if install_id:
                     try:
-                        repos = self.api_client.get_installation_repositories(
-                            jwt_token, install_id
-                        )
+                        repos = self.api_client.get_installation_repositories(jwt_token, install_id)
                         installation_repos[install_id] = repos
                     except Exception as error:
                         logger.warning(

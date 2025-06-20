@@ -16,9 +16,7 @@ class GitHubAPIClient:
     def __init__(self, timeout: int = 30):
         self.timeout = timeout
 
-    def get_installation_access_token(
-        self, jwt_token: str, installation_id: int
-    ) -> str:
+    def get_installation_access_token(self, jwt_token: str, installation_id: int) -> str:
         """Get installation access token."""
         url = f"{self.BASE_URL}/app/installations/{installation_id}/access_tokens"
         headers = {
@@ -27,9 +25,7 @@ class GitHubAPIClient:
         }
 
         try:
-            logger.debug(
-                "Requesting access token for installation ID: %s", installation_id
-            )
+            logger.debug("Requesting access token for installation ID: %s", installation_id)
             response = requests.post(url, headers=headers, timeout=self.timeout)
             response.raise_for_status()
 
@@ -44,14 +40,10 @@ class GitHubAPIClient:
             return token_data["token"]
 
         except requests.exceptions.HTTPError as http_error:
-            logger.error(
-                "HTTP error occurred while getting access token: %s", http_error
-            )
+            logger.error("HTTP error occurred while getting access token: %s", http_error)
             raise http_error
         except requests.exceptions.RequestException as req_error:
-            logger.error(
-                "Request error occurred while getting access token: %s", req_error
-            )
+            logger.error("Request error occurred while getting access token: %s", req_error)
             raise req_error
 
     def list_installations(self, jwt_token: str) -> List[Dict[str, Any]]:
@@ -72,14 +64,10 @@ class GitHubAPIClient:
             return installations
 
         except requests.exceptions.HTTPError as http_error:
-            logger.error(
-                "HTTP error occurred while listing installations: %s", http_error
-            )
+            logger.error("HTTP error occurred while listing installations: %s", http_error)
             raise http_error
         except requests.exceptions.RequestException as req_error:
-            logger.error(
-                "Request error occurred while listing installations: %s", req_error
-            )
+            logger.error("Request error occurred while listing installations: %s", req_error)
             raise req_error
 
     def validate_token(self, token: str) -> Dict[str, Any]:
@@ -122,9 +110,7 @@ class GitHubAPIClient:
             return {
                 "valid": False,
                 "status_code": response.status_code,
-                "reason": error_messages.get(
-                    response.status_code, f"HTTP {response.status_code}"
-                ),
+                "reason": error_messages.get(response.status_code, f"HTTP {response.status_code}"),
             }
 
         except requests.exceptions.RequestException as req_error:
@@ -148,10 +134,7 @@ class GitHubAPIClient:
             return True
 
         except requests.exceptions.HTTPError as http_error:
-            if (
-                http_error.response is not None
-                and http_error.response.status_code == 404
-            ):
+            if http_error.response is not None and http_error.response.status_code == 404:
                 logger.warning("Token not found or already revoked")
                 return False
             logger.error("HTTP error occurred while revoking token: %s", http_error)
@@ -181,15 +164,11 @@ class GitHubAPIClient:
             logger.error("Error fetching app info: %s", error)
             raise error
 
-    def get_installation_repositories(
-        self, jwt_token: str, installation_id: int
-    ) -> Dict[str, Any]:
+    def get_installation_repositories(self, jwt_token: str, installation_id: int) -> Dict[str, Any]:
         """Get repositories accessible by installation."""
         try:
             # First get an installation access token
-            installation_token = self.get_installation_access_token(
-                jwt_token, installation_id
-            )
+            installation_token = self.get_installation_access_token(jwt_token, installation_id)
 
             # Use the installation token to get repositories
             url = f"{self.BASE_URL}/installation/repositories"
@@ -209,9 +188,7 @@ class GitHubAPIClient:
             # Return empty result instead of raising
             return {"total_count": 0, "repositories": [], "error": str(error)}
 
-    def get_accessible_repositories_via_token(
-        self, installation_token: str
-    ) -> Dict[str, Any]:
+    def get_accessible_repositories_via_token(self, installation_token: str) -> Dict[str, Any]:
         """Get repositories using installation token instead of JWT."""
         url = f"{self.BASE_URL}/installation/repositories"
         headers = {

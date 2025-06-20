@@ -108,17 +108,13 @@ class OutputFormatter:
 
             if "repositories_count" in validation_result:
                 count = validation_result["repositories_count"]
-                lines.append(
-                    f"Accessible repositories: {Fore.CYAN}{count}{Style.RESET_ALL}"
-                )
+                lines.append(f"Accessible repositories: {Fore.CYAN}{count}{Style.RESET_ALL}")
 
             if "rate_limit" in validation_result:
                 rate_limit = validation_result["rate_limit"]
                 remaining = rate_limit.get("remaining", "Unknown")
                 limit = rate_limit.get("limit", "Unknown")
-                lines.append(
-                    f"Rate limit: {Fore.YELLOW}{remaining}/{limit}{Style.RESET_ALL}"
-                )
+                lines.append(f"Rate limit: {Fore.YELLOW}{remaining}/{limit}{Style.RESET_ALL}")
 
             if "scopes" in validation_result and validation_result["scopes"]:
                 scopes = ", ".join(validation_result["scopes"])
@@ -148,8 +144,7 @@ class OutputFormatter:
                 f"  Owner: {Fore.MAGENTA}",
                 f"{owner.get('login', 'Unknown')}{Style.RESET_ALL}",
                 f"  Owner Type: {owner.get('type', 'Unknown')}",
-                f"  URL: {Fore.BLUE}"
-                f"{app_info.get('html_url', 'Unknown')}{Style.RESET_ALL}",
+                f"  URL: {Fore.BLUE}" f"{app_info.get('html_url', 'Unknown')}{Style.RESET_ALL}",
                 f"  Created: {Fore.BLUE}",
                 f"{app_info.get('created_at', 'Unknown')}{Style.RESET_ALL}",
                 "",  # Empty line
@@ -177,14 +172,11 @@ class OutputFormatter:
         lines.extend(
             [
                 f"{Fore.BLUE}{Style.BRIGHT}📍 Installation Summary{Style.RESET_ALL}",
-                f"  Total Installations: {Fore.YELLOW}",
-                f"{len(installations)}{Style.RESET_ALL}",
+                f"  Total Installations: {Fore.YELLOW}{len(installations)}{Style.RESET_ALL}",
             ]
         )
 
-        total_repos = sum(
-            repos.get("total_count", 0) for repos in installation_repos.values()
-        )
+        total_repos = sum(repos.get("total_count", 0) for repos in installation_repos.values())
 
         lines.extend(
             [
@@ -215,11 +207,7 @@ class OutputFormatter:
 
         # Repository details
         if installation_repos:
-            lines.append(
-                self._format_repo_details(
-                    installations, installation_repos, total_repos
-                )
-            )
+            lines.append(self._format_repo_details(installations, installation_repos, total_repos))
 
         return "\n".join(lines)
 
@@ -285,9 +273,7 @@ class OutputFormatter:
 
                 # Add "more repositories" line if needed
                 if repo_count > threshold:
-                    lines.append(
-                        f"    ... and {repo_count - threshold} more repositories"
-                    )
+                    lines.append(f"    ... and {repo_count - threshold} more repositories")
 
         return "\n".join(lines)
 

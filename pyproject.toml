@@ -115,12 +115,12 @@ exclude_lines = [
 
 
 [tool.black]
-line-length = 88
+line-length = 100
 target-version = ['py39']
 include = '\.pyi?$'
 
 [tool.pylint.format]
-max-line-length = 88  # Match Black's line length
+max-line-length = 100
 
 [tool.pylint.messages_control]
 disable = [
