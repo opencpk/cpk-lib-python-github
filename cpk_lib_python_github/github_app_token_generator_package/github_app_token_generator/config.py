@@ -5,7 +5,7 @@ import os
 from dataclasses import dataclass
 from typing import Any, Dict, Optional
 
-import toml  # Moved from line 158 to top level
+import toml
 
 logger = logging.getLogger(__name__)
 
