@@ -88,6 +88,7 @@ def main():
         # Set debug logging if requested
         if args.debug:
             logging.getLogger().setLevel(logging.DEBUG)
+            logger.setLevel(logging.DEBUG)
             logger.debug("Debug logging enabled")
 
         # Get configuration - this can raise ValueError for user errors
