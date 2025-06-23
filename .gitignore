@@ -1,0 +1,42 @@
+# Development files
+# IDEs
+# Logs
+# OS
+# Python
+# Virtual environments
+*$py.class
+*.egg
+*.egg-info/
+*.log
+*.py[cod]
+*.so
+*.swo
+*.swp
+.DS_Store
+.Python
+.coverage
+.eggs/
+.idea/
+.installed.cfg
+.python-version
+.vscode/
+ENV/
+MANIFEST
+Thumbs.db
+__pycache__/
+build/
+deleted
+develop-eggs/
+dist/
+downloads/
+eggs/
+env/
+lib/
+lib64/
+parts/
+pip-wheel-metadata/
+sdist/
+share/python-wheels/
+var/
+venv/
+wheels/

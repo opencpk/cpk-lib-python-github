@@ -1,0 +1,9 @@
+title = "Gitleaks Configuration"
+
+[allowlist]
+description = "Allowlist for test files"
+paths = [
+  '''cpk_lib_python_github/.*tests/.*''',
+  '''.*conftest\.py''',
+  '''.*test_.*\.py''',
+]

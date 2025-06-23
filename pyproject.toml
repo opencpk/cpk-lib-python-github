@@ -1,0 +1,135 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["cpk_lib_python_github*"]
+
+[project]
+name = "cpk-lib-python-github"
+version = "1.2.0"
+description = "Common Python opencepk packages."
+readme = "README.md"
+license = { text = "GPLv3" }
+authors = [{name = "CPK Cloud Engineering Platform Kit", email = "opencepk@gmail.com"}]
+requires-python = ">=3.9"
+
+# Add this dependencies section
+dependencies = [
+    "PyJWT[crypto]>=2.0.0",
+    "requests>=2.25.0",
+    "toml>=0.10.0",
+    "colorama>=0.4.6"
+]
+
+keywords = ["github", "app", "token", "file", "pre-commit", "hook", "git", "tool", "utility", "cpk"]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Topic :: File Formats :: JSON",
+    "Topic :: Software Development :: Pre-processors",
+    "Topic :: Software Development :: Version Control :: Git",
+    "Topic :: Text Processing",
+    "Topic :: Text Processing :: Filters",
+    "Topic :: Text Processing :: General",
+    "Topic :: Utilities"
+]
+
+[project.urls]
+Homepage = "https://github.com/cpk/cpk-lib-python-github"
+Repository = "https://github.com/cpk/cpk-lib-python-github"
+Issues = "https://github.com/cpk/cpk-lib-python-github/issues"
+Documentation = "https://github.com/cpk/cpk-lib-python-github#readme"
+
+[project.entry-points."console_scripts"]
+github-app-token-generator = "cpk_lib_python_github.github_app_token_generator_package.github_app_token_generator.main:main"
+
+[project.optional-dependencies]
+dep = [
+    "toml",
+    "black>=23.0.0",
+    "pylint>=2.17.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0"
+]
+
+test = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "responses>=0.24.0",
+    "pytest-mock>=3.10.0"
+]
+dev = [
+    "cpk-lib-python-github[dep,test]"
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "cpk_lib_python_github/github_app_token_generator_package/tests"
+]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--verbose",
+    "--cov=cpk_lib_python_github.github_app_token_generator_package.github_app_token_generator",
+    "--cov-report=term-missing",
+    "--cov-report=html"
+]
+markers = [
+    "unit: Unit tests with mocked responses",
+    "integration: Integration tests with real API calls",
+    "slow: Slow running tests"
+]
+
+[tool.coverage.run]
+source = ["cpk_lib_python_github"]
+omit = [
+    "*/tests/*",
+    "*/venv/*",
+    "*/__pycache__/*"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError"
+]
+
+
+[tool.black]
+line-length = 100
+target-version = ['py39']
+include = '\.pyi?$'
+
+[tool.pylint.format]
+max-line-length = 100
+
+[tool.pylint.messages_control]
+disable = [
+    "broad-exception-caught",
+    "too-many-arguments",
+    "too-many-locals"
+]
+
+
+[tool.pylint.design]
+max-statements = 60  # Increase from default 50 to allow longer functions
+max-module-lines = 1200
