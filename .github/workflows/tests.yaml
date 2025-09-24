@@ -28,12 +28,12 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest cpk_lib_python_github/github_app_token_generator_package/tests/ -v
+          pytest cpk_lib_python_github/tests/ -v
 
       - name: Run tests with coverage
         run: |
-          pytest cpk_lib_python_github/github_app_token_generator_package/tests/ \
-            --cov=cpk_lib_python_github.github_app_token_generator_package.github_app_token_generator \
+          pytest cpk_lib_python_github/tests/ \
+            --cov=cpk_lib_python_github.github_app_token_generator \
             --cov-report=term-missing
 
   test-installation:
