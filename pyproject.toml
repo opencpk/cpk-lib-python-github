@@ -55,7 +55,7 @@ Issues = "https://github.com/cpk/cpk-lib-python-github/issues"
 Documentation = "https://github.com/cpk/cpk-lib-python-github#readme"
 
 [project.entry-points."console_scripts"]
-github-app-token-generator = "cpk_lib_python_github.github_app_token_generator_package.github_app_token_generator.main:main"
+github-app-token-generator = "cpk_lib_python_github.github_app_token_generator.main:main"
 
 [project.optional-dependencies]
 dep = [
@@ -78,7 +78,7 @@ dev = [
 
 [tool.pytest.ini_options]
 testpaths = [
-    "cpk_lib_python_github/github_app_token_generator_package/tests"
+    "cpk_lib_python_github/tests"
 ]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
@@ -87,7 +87,7 @@ addopts = [
     "--strict-markers",
     "--strict-config",
     "--verbose",
-    "--cov=cpk_lib_python_github.github_app_token_generator_package.github_app_token_generator",
+    "--cov=cpk_lib_python_github.github_app_token_generator",
     "--cov-report=term-missing",
     "--cov-report=html"
 ]

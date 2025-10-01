@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 """CPK Lib Python GitHub - GitHub App Token Generator Package."""
 
-from .github_app_token_generator_package.github_app_token_generator import (
+from .github_app_token_generator import (
     token_manager,
 )
-from .github_app_token_generator_package.github_app_token_generator.config import (
+from .github_app_token_generator.config import (
     Config,
 )
-from .github_app_token_generator_package.github_app_token_generator.formatters import (
+from .github_app_token_generator.formatters import (
     OutputFormatter,
 )
-from .github_app_token_generator_package.github_app_token_generator.github_api import (
+from .github_app_token_generator.github_api import (
     GitHubAPIClient,
 )
 
