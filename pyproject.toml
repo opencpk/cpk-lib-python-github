@@ -15,12 +15,12 @@ license = { text = "GPLv3" }
 authors = [{name = "CPK Cloud Engineering Platform Kit", email = "opencepk@gmail.com"}]
 requires-python = ">=3.9"
 
-# Add this dependencies section
 dependencies = [
     "PyJWT[crypto]>=2.0.0",
     "requests>=2.25.0",
     "toml>=0.10.0",
-    "colorama>=0.4.6"
+    "colorama>=0.4.6",
+    "openpyxl>=3.0.0"
 ]
 
 keywords = ["github", "app", "token", "file", "pre-commit", "hook", "git", "tool", "utility", "cpk"]
@@ -56,6 +56,7 @@ Documentation = "https://github.com/cpk/cpk-lib-python-github#readme"
 
 [project.entry-points."console_scripts"]
 github-app-token-generator = "cpk_lib_python_github.github_app_token_generator.main:main"
+github-user-access-backup = "cpk_lib_python_github.github_user_access_backup.main:main"
 
 [project.optional-dependencies]
 dep = [
@@ -126,7 +127,9 @@ max-line-length = 100
 disable = [
     "broad-exception-caught",
     "too-many-arguments",
-    "too-many-locals"
+    "too-many-locals",
+    "too-many-positional-arguments",
+    "too-many-branches"
 ]
 
 
